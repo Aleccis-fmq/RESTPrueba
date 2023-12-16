@@ -16,7 +16,7 @@ import edu.com.model.Usuarios;
 import edu.com.service.IUsuariosService;
 
 @RestController
-@RequestMapping("/api/usuario")
+@RequestMapping("/api/usuarios")
 public class UsuariosController {
 
 	//service
@@ -29,11 +29,21 @@ public class UsuariosController {
 	private ModelMapper mapper;
 	
 	
+	
 	/*
 	//LISTAR
 	@GetMapping
-	public ResponseEntity<List<UsuariosDTO>> listarr()throws Exception{
-		List<UsuariosDTO> lista = service.listar().stream().map(p -> mapper.map(p,UsuariosDTO.class))
+	public List<Usuarios> listar() throws Exception{
+		return service.listar();
+	}
+	*/
+	
+	
+	//LISTAR
+	/*
+	@GetMapping
+	public ResponseEntity<List<Usuarios>> listarr()throws Exception{
+		List<Usuarios> lista = service.listar().stream().map(p -> mapper.map(p,Usuarios.class))
 				.collect(Collectors.toList());
 		
 		return new ResponseEntity<> (lista,HttpStatus.OK);
@@ -41,15 +51,17 @@ public class UsuariosController {
 	*/
 	
 	
+	
 	//LISTAR MODELO
 	@GetMapping
-	public List<UsuariosDTO> listarUsuariosDTOs() throws Exception{
+	public List<Usuarios> listarUsuariosDTOs() throws Exception{
 		List<Usuarios> usuarios = service.listar();
 		
-		List<UsuariosDTO> usuariosDTOs = usuarios.stream()
-				.map(usu -> mapper.map(usu, UsuariosDTO.class))
+		List<Usuarios> usuariosDTOs = usuarios.stream()
+				.map(usu -> mapper.map(usu, Usuarios.class))
 				.collect(Collectors.toList());
 		return usuariosDTOs;
 	}
+	
 	
 }

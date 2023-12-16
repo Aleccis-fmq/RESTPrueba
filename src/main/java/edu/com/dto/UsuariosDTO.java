@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UsuariosDTO {
 
 	
