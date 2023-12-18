@@ -7,8 +7,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,7 +36,7 @@ public class UsuariosController {
 	
 	
 	
-	//Modelo
+	//CREACION DE MODELO
 	//LISTAR 
 	@GetMapping
 	public List<Usuarios> listar() throws Exception{
@@ -45,6 +48,27 @@ public class UsuariosController {
 	public Usuarios registrar(@RequestBody Usuarios usu) throws Exception{
 		return service.registrar(usu);
 	}
+	
+	//LISTARPORID
+	@GetMapping("/{id}")
+	public Usuarios listarporIdd(@PathVariable("id") Integer id) throws Exception{
+		return service.listarPorId(id);
+	}
+	
+	//MODIFICAR
+	@PutMapping
+	public Usuarios modificar(@RequestBody Usuarios usuarios) throws Exception {
+		return service.modificar(usuarios);
+	}
+	
+	//ELIMINAR
+	@DeleteMapping("/{id}")
+	public void eliminar (@PathVariable("id")Integer id) throws Exception {
+		service.eliminar(id);
+	}
+	
+	//CREACION DE DTOS
+	
 	
 	//LISTAR
 	/*
