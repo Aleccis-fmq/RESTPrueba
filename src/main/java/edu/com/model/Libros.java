@@ -13,8 +13,6 @@ import lombok.NoArgsConstructor;
 
 
 @Entity
-@NoArgsConstructor
-@Data
 public class Libros {
 
 	
@@ -30,4 +28,37 @@ public class Libros {
 	@JoinColumn(name = "id_autor",nullable =  false,
 	foreignKey = @ForeignKey (name = "FK_libros_autores"))
 	private Autores autor;
+
+	public Integer getIdUsuario() {
+		return idUsuario;
+	}
+
+	public void setIdUsuario(Integer idUsuario) {
+		this.idUsuario = idUsuario;
+	}
+
+	public String getTitulo() {
+		return titulo;
+	}
+
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
+	}
+
+	public Autores getAutor() {
+		return autor;
+	}
+
+	public void setAutor(Autores autor) {
+		this.autor = autor;
+	}
+
+	public Libros(Integer idUsuario, String titulo, Autores autor) {
+		super();
+		this.idUsuario = idUsuario;
+		this.titulo = titulo;
+		this.autor = autor;
+	}
+	
+	
 }

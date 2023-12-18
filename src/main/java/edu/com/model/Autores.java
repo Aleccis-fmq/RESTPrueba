@@ -9,8 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@NoArgsConstructor
-@Data
+
 public class Autores {
 	
 	@Id
@@ -22,5 +21,39 @@ public class Autores {
 	
 	@Column(nullable = false)
 	private String nacionalidad;
+
+	public Integer getIdAutor() {
+		return idAutor;
+	}
+
+	public void setIdAutor(Integer idAutor) {
+		this.idAutor = idAutor;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getNacionalidad() {
+		return nacionalidad;
+	}
+
+	public void setNacionalidad(String nacionalidad) {
+		this.nacionalidad = nacionalidad;
+	}
+
+	public Autores(Integer idAutor, String nombre, String nacionalidad) {
+		super();
+		this.idAutor = idAutor;
+		this.nombre = nombre;
+		this.nacionalidad = nacionalidad;
+	}
+	
+	
+	
 
 }
