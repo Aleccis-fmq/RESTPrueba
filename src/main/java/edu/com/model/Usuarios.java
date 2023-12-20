@@ -6,9 +6,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
 @Entity
+
 public class Usuarios {
 
 	
@@ -24,6 +23,9 @@ public class Usuarios {
 	
 	@Column(nullable = false)
 	private String edad;
+
+
+	
 
 	public Integer getIdUsuario() {
 		return idUsuario;

@@ -46,25 +46,25 @@ public class UsuariosController {
 	}
 
 	// LISTARPORID
-	@GetMapping("/{id}")
+	@GetMapping("/0/{id}")
 	public Usuarios listarporId(@PathVariable("id") Integer id) throws Exception {
 		return service.listarPorId(id);
 	}
 
 	// REGISTRAR
-	@PostMapping
+	@PostMapping("/0")
 	public Usuarios registrar(@RequestBody Usuarios usu) throws Exception {
 		return service.registrar(usu);
 	}
 
 	// MODIFICAR
-	@PutMapping
+	@PutMapping("/0")
 	public Usuarios modificar(@RequestBody Usuarios usuarios) throws Exception {
 		return service.modificar(usuarios);
 	}
 
 	// ELIMINAR
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/0/{id}")
 	public void eliminar(@PathVariable("id") Integer id) throws Exception {
 		service.eliminar(id);
 	}
@@ -122,19 +122,16 @@ public class UsuariosController {
 		return new ResponseEntity<Usuarios>(obj, HttpStatus.OK);
 	}
 
-	// REGISTRAR
+	// REGISTRAR /2.5
 	@PostMapping("/2")
 	public ResponseEntity<Void> registrar2(@RequestBody Usuarios usu) throws Exception {
 		Usuarios obj = service.registrar(usu);
-		
-		//ACCESO AL RECURSO :8080/usuarios/2/1
-		URI locattion = ServletUriComponentsBuilder
-				.fromCurrentRequest()
-				.path("/{id}")
-				.buildAndExpand(obj.getIdUsuario())
-				.toUri();
-		
-		//return new ResponseEntity<Usuarios>(obj, HttpStatus.CREATED);
+
+		// ACCESO AL RECURSO :8080/usuarios/2/1
+		URI locattion = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(obj.getIdUsuario()).toUri();
+
+		// return new ResponseEntity<Usuarios>(obj, HttpStatus.CREATED);
 		return ResponseEntity.created(locattion).build();
 	}
 
@@ -152,22 +149,118 @@ public class UsuariosController {
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
 
+	// RICH NIVEL 2 / DTO / HEADERS
+
 	// LISTAR
-	/*
-	 * @GetMapping public ResponseEntity<List<Usuarios>> listarr()throws Exception{
-	 * List<Usuarios> lista = service.listar().stream().map(p ->
-	 * mapper.map(p,Usuarios.class)) .collect(Collectors.toList());
-	 * 
-	 * return new ResponseEntity<> (lista,HttpStatus.OK); }
-	 */
+	@GetMapping("/3")
+	public ResponseEntity<List<UsuariosDTO>> listar3() throws Exception {
+		List<UsuariosDTO> lista = service.listar().stream().map(p -> mapper.map(p, UsuariosDTO.class))
+				.collect(Collectors.toList());
+		return new ResponseEntity<>(lista, HttpStatus.OK);
+	}
 
-	// LISTAR MODELO
-	/*
-	 * @GetMapping public List<Usuarios> listarUsuariosDTOs() throws Exception{
-	 * List<Usuarios> usuarios = service.listar();
-	 * 
-	 * List<Usuarios> usuariosDTOs = usuarios.stream() .map(usu -> mapper.map(usu,
-	 * Usuarios.class)) .collect(Collectors.toList()); return usuariosDTOs; }
-	 */
+	// LISTARPORID
+	@GetMapping("/3/{id}")
+	public ResponseEntity<UsuariosDTO> listarporId3(@PathVariable("id") Integer id) throws Exception {
+		Usuarios obj = service.listarPorId(id);
+		UsuariosDTO dto = mapper.map(obj, UsuariosDTO.class);
 
+		return new ResponseEntity<UsuariosDTO>(dto, HttpStatus.OK);
+	}
+
+	// REGISTRAR /2.5
+	@PostMapping("/3")
+	public ResponseEntity<Void> registrar3(@RequestBody UsuariosDTO dtoRequest) throws Exception {
+		Usuarios usu = mapper.map(dtoRequest, Usuarios.class);
+		Usuarios obj = service.registrar(usu);
+
+		// ACCESO AL RECURSO :8080/usuarios/2/1
+		URI locattion = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(obj.getIdUsuario()).toUri();
+
+		// return new ResponseEntity<Usuarios>(obj, HttpStatus.CREATED);
+		return ResponseEntity.created(locattion).build();
+	}
+
+	// MODIFICAR
+	@PutMapping("/3")
+	public ResponseEntity<Usuarios> modificar3(@RequestBody UsuariosDTO dtoRequest) throws Exception {
+		Usuarios usu = mapper.map(dtoRequest, Usuarios.class);
+		Usuarios obj = service.modificar(usu);
+
+		return new ResponseEntity<Usuarios>(obj, HttpStatus.OK);
+	}
+
+	// ELIMINAR
+	// no hace uso de dtos
+	@DeleteMapping("/3/{id}")
+	public ResponseEntity<Void> eliminar3(@PathVariable("id") Integer id) throws Exception {
+		service.eliminar(id);
+		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+	}
+
+	// RICH NIVEL 3 / DTO / HEADERS
+
+	// LISTAR
+	@GetMapping("/4")
+	public ResponseEntity<List<UsuariosDTO>> listar4() throws Exception {
+		List<UsuariosDTO> lista = service.listar().stream().map(p -> mapper.map(p, UsuariosDTO.class))
+				.collect(Collectors.toList());
+		return new ResponseEntity<>(lista, HttpStatus.OK);
+	}
+
+	// LISTARPORID
+	@GetMapping("/4/{id}")
+	public ResponseEntity<UsuariosDTO> listarporId4(@PathVariable("id") Integer id) throws Exception {
+		Usuarios obj = service.listarPorId(id);
+		UsuariosDTO dto = mapper.map(obj, UsuariosDTO.class);
+
+		return new ResponseEntity<UsuariosDTO>(dto, HttpStatus.OK);
+	}
+
+	// REGISTRAR /2.5
+	@PostMapping("/4")
+	public ResponseEntity<Void> registrar4(@RequestBody UsuariosDTO dtoRequest) throws Exception {
+		Usuarios usu = mapper.map(dtoRequest, Usuarios.class);
+		Usuarios obj = service.registrar(usu);
+
+		// ACCESO AL RECURSO :8080/usuarios/2/1
+		URI locattion = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(obj.getIdUsuario()).toUri();
+
+		// return new ResponseEntity<Usuarios>(obj, HttpStatus.CREATED);
+		return ResponseEntity.created(locattion).build();
+	}
+
+	// MODIFICAR
+	@PutMapping("/4")
+	public ResponseEntity<Usuarios> modificar4(@RequestBody UsuariosDTO dtoRequest) throws Exception {
+		Usuarios usu = mapper.map(dtoRequest, Usuarios.class);
+		Usuarios obj = service.modificar(usu);
+
+		return new ResponseEntity<Usuarios>(obj, HttpStatus.OK);
+	}
+
+	// ELIMINAR
+	// no hace uso de dtos
+	@DeleteMapping("/4/{id}")
+	public ResponseEntity<Void> eliminar4(@PathVariable("id") Integer id) throws Exception {
+		service.eliminar(id);
+		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+	}
+
+	/*
+	 * @GetMapping("/5") public ResponseEntity<List<UsuariosDTO>> listarr() throws
+	 * Exception { List<UsuariosDTO> lista = service.listar().stream().map(p ->
+	 * mapper.map(p, UsuariosDTO.class)) .collect(Collectors.toList());
+	 * 
+	 * return new ResponseEntity<>(lista, HttpStatus.OK); }
+	 * 
+	 * @GetMapping("/6") public List<Usuarios> listarUsuariosDTOs() throws Exception
+	 * { //List<Usuarios> usuarios = service.listar();
+	 * 
+	 * List<Usuarios> usuariosDTOs = service.listar().stream().map(usu ->
+	 * mapper.map(usu, Usuarios.class)) .collect(Collectors.toList()); return
+	 * usuariosDTOs; }
+	 */
 }
