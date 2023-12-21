@@ -24,6 +24,7 @@ import edu.com.dto.UsuariosDTO;
 import edu.com.model.Usuarios;
 import edu.com.service.IUsuariosService;
 import jakarta.servlet.Servlet;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -170,7 +171,7 @@ public class UsuariosController {
 
 	// REGISTRAR /2.5
 	@PostMapping("/3")
-	public ResponseEntity<Void> registrar3(@RequestBody UsuariosDTO dtoRequest) throws Exception {
+	public ResponseEntity<Void> registrar3(@Valid @RequestBody UsuariosDTO dtoRequest) throws Exception {
 		Usuarios usu = mapper.map(dtoRequest, Usuarios.class);
 		Usuarios obj = service.registrar(usu);
 
@@ -184,7 +185,7 @@ public class UsuariosController {
 
 	// MODIFICAR
 	@PutMapping("/3")
-	public ResponseEntity<Usuarios> modificar3(@RequestBody UsuariosDTO dtoRequest) throws Exception {
+	public ResponseEntity<Usuarios> modificar3(@Valid @RequestBody UsuariosDTO dtoRequest) throws Exception {
 		Usuarios usu = mapper.map(dtoRequest, Usuarios.class);
 		Usuarios obj = service.modificar(usu);
 

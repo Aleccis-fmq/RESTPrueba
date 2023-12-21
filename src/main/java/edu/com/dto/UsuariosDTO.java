@@ -15,7 +15,7 @@ public class UsuariosDTO {
 	private Integer idUsuario;
 	
 	@NotNull
-	@Size(min = 3,message = "Nombres minimo 3")
+	@Size(min = 3,message = "{nombres.size}")
 	private String nombre;
 	
 	@NotNull
@@ -24,7 +24,7 @@ public class UsuariosDTO {
 	private String correo;
 	
 	@NotNull
-	@Size(min = 2,max = 4 , message = "Edad ser >18")
+	@Size(min = 2,max = 4 , message = "{edad.size}")
 	private String edad;
 	
 	public Integer getIdUsuario() {
