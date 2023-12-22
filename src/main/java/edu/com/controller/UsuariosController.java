@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import edu.com.dto.UsuariosDTO;
+import edu.com.exeption.ModeloNoFound;
 import edu.com.model.Usuarios;
 import edu.com.service.IUsuariosService;
 import jakarta.servlet.Servlet;
@@ -200,7 +201,7 @@ public class UsuariosController {
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
 
-	// RICH NIVEL 3 / DTO / HEADERS
+	// RICH NIVEL 3 / DTO / HEADERS /exception
 
 	// LISTAR
 	@GetMapping("/4")
@@ -214,6 +215,12 @@ public class UsuariosController {
 	@GetMapping("/4/{id}")
 	public ResponseEntity<UsuariosDTO> listarporId4(@PathVariable("id") Integer id) throws Exception {
 		Usuarios obj = service.listarPorId(id);
+
+		// exception
+		if (obj == null) {
+			throw new ModeloNoFound("NO EXISTE ESE ID : " + id);
+		}
+
 		UsuariosDTO dto = mapper.map(obj, UsuariosDTO.class);
 
 		return new ResponseEntity<UsuariosDTO>(dto, HttpStatus.OK);
@@ -221,10 +228,11 @@ public class UsuariosController {
 
 	// REGISTRAR /2.5
 	@PostMapping("/4")
-	public ResponseEntity<Void> registrar4(@RequestBody UsuariosDTO dtoRequest) throws Exception {
+	public ResponseEntity<Void> registrar4(@Valid @RequestBody UsuariosDTO dtoRequest) throws Exception {
 		Usuarios usu = mapper.map(dtoRequest, Usuarios.class);
 		Usuarios obj = service.registrar(usu);
 
+		
 		// ACCESO AL RECURSO :8080/usuarios/2/1
 		URI locattion = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(obj.getIdUsuario()).toUri();
@@ -235,7 +243,16 @@ public class UsuariosController {
 
 	// MODIFICAR
 	@PutMapping("/4")
-	public ResponseEntity<Usuarios> modificar4(@RequestBody UsuariosDTO dtoRequest) throws Exception {
+	public ResponseEntity<Usuarios> modificar4(@Valid @RequestBody UsuariosDTO dtoRequest) throws Exception {
+
+		// exception2
+		Usuarios usus = service.listarPorId(dtoRequest.getIdUsuario());
+
+		//
+		if (usus == null) {
+			throw new ModeloNoFound("NO EXISTE ESE ID : " + dtoRequest.getIdUsuario());
+		}
+
 		Usuarios usu = mapper.map(dtoRequest, Usuarios.class);
 		Usuarios obj = service.modificar(usu);
 
@@ -243,12 +260,31 @@ public class UsuariosController {
 	}
 
 	// ELIMINAR
+	
 	// no hace uso de dtos
 	@DeleteMapping("/4/{id}")
 	public ResponseEntity<Void> eliminar4(@PathVariable("id") Integer id) throws Exception {
+		
+		
+		Usuarios obj= service.listarPorId(id);
+		
+		//
+		if (obj == null) {
+			throw new ModeloNoFound("NO EXISTE ESE ID : " + id);
+		}
+		
+		//
 		service.eliminar(id);
+		
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
+	
+	
+	
+	
+	
+	
+	
 
 	/*
 	 * @GetMapping("/5") public ResponseEntity<List<UsuariosDTO>> listarr() throws
