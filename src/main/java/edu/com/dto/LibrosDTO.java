@@ -19,7 +19,6 @@ public class LibrosDTO {
 	
 	//gts
 
-
 	public Integer getIdLibro() {
 		return IdLibro;
 	}

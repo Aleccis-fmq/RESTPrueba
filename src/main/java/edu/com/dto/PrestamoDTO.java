@@ -2,6 +2,8 @@ package edu.com.dto;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -24,6 +26,8 @@ public class PrestamoDTO {
 	
 	@NotEmpty
 	private LibrosDTO librodto;
+	
+	
 	@NotEmpty
 	private UsuariosDTO usuariodto;
 	

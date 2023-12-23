@@ -1,13 +1,20 @@
 package edu.com.controller;
 
+//paquetes de hateoas
+//METODOS ESTATICOS PARA NO REDUNDAR
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.net.URI;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.tools.DocumentationTool.Location;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,7 +31,6 @@ import edu.com.dto.UsuariosDTO;
 import edu.com.exeption.ModeloNoFound;
 import edu.com.model.Usuarios;
 import edu.com.service.IUsuariosService;
-import jakarta.servlet.Servlet;
 import jakarta.validation.Valid;
 
 @RestController
@@ -232,7 +238,6 @@ public class UsuariosController {
 		Usuarios usu = mapper.map(dtoRequest, Usuarios.class);
 		Usuarios obj = service.registrar(usu);
 
-		
 		// ACCESO AL RECURSO :8080/usuarios/2/1
 		URI locattion = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(obj.getIdUsuario()).toUri();
@@ -260,44 +265,182 @@ public class UsuariosController {
 	}
 
 	// ELIMINAR
-	
+
 	// no hace uso de dtos
 	@DeleteMapping("/4/{id}")
 	public ResponseEntity<Void> eliminar4(@PathVariable("id") Integer id) throws Exception {
-		
-		
-		Usuarios obj= service.listarPorId(id);
-		
+
+		Usuarios obj = service.listarPorId(id);
+
 		//
 		if (obj == null) {
 			throw new ModeloNoFound("NO EXISTE ESE ID : " + id);
 		}
-		
+
 		//
 		service.eliminar(id);
-		
+
+		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+	}
+
+	// RICH NIVEL 3 / DTO / HEADERS /exception/HATEOAS
+
+	// LISTAR
+	@GetMapping("/5")
+	public CollectionModel<EntityModel<UsuariosDTO>> listar5() throws Exception {
+	    List<Usuarios> lista = service.listar();
+
+	    if (lista.isEmpty()) {
+	        // Manejo cuando la lista está vacía
+	    }
+
+	    List<EntityModel<UsuariosDTO>> usuariosDTO = lista.stream()
+	    		.map(usuario -> {
+	        UsuariosDTO dto = mapper.map(usuario, UsuariosDTO.class);
+
+	        WebMvcLinkBuilder link = null;
+			try {
+				link = linkTo(methodOn(this.getClass()).listarporId5(usuario.getIdUsuario()));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	        EntityModel<UsuariosDTO> recurso = EntityModel.of(dto, link.withRel("usuario-info"));
+
+	        return recurso;
+	    }).collect(Collectors.toList());
+
+	    WebMvcLinkBuilder linkTodos = linkTo(methodOn(this.getClass()).listar5());
+	    CollectionModel<EntityModel<UsuariosDTO>> recursos = CollectionModel.of(usuariosDTO,
+	            linkTodos.withRel("Todos-los-Usuarios"));
+
+	    return recursos;
+	}
+
+	// LISTARPORID
+	@GetMapping("/5/{id}")
+	public EntityModel<UsuariosDTO> listarporId5(@PathVariable("id") Integer id) throws Exception {
+		Usuarios obj = service.listarPorId(id);
+
+		// exception
+		if (obj == null) {
+			throw new ModeloNoFound("NO EXISTE ESE ID : " + id);
+		}
+
+		UsuariosDTO dto = mapper.map(obj, UsuariosDTO.class);
+
+		// proceso hateos creacion href
+
+		EntityModel<UsuariosDTO> recurso = EntityModel.of(dto);
+
+		// http://localhost:8080/api/usuarios/5/1
+		WebMvcLinkBuilder link1 = linkTo(methodOn(this.getClass()).listarporId5(id));
+		recurso.add(link1.withRel("usuario-info"));
+
+		return recurso;
+	}
+
+	// REGISTRAR /2.5
+	@PostMapping("/5")
+	public ResponseEntity<Void> registrar5(@Valid @RequestBody UsuariosDTO dtoRequest) throws Exception {
+		Usuarios usu = mapper.map(dtoRequest, Usuarios.class);
+		Usuarios obj = service.registrar(usu);
+
+		// ACCESO AL RECURSO :8080/usuarios/2/1
+		URI locattion = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(obj.getIdUsuario()).toUri();
+
+		// return new ResponseEntity<Usuarios>(obj, HttpStatus.CREATED);
+		return ResponseEntity.created(locattion).build();
+	}
+
+	// MODIFICAR
+	@PutMapping("/5")
+	public ResponseEntity<Usuarios> modificar5(@Valid @RequestBody UsuariosDTO dtoRequest) throws Exception {
+
+		// exception2
+		Usuarios usus = service.listarPorId(dtoRequest.getIdUsuario());
+
+		//
+		if (usus == null) {
+			throw new ModeloNoFound("NO EXISTE ESE ID : " + dtoRequest.getIdUsuario());
+		}
+
+		Usuarios usu = mapper.map(dtoRequest, Usuarios.class);
+		Usuarios obj = service.modificar(usu);
+
+		return new ResponseEntity<Usuarios>(obj, HttpStatus.OK);
+	}
+
+	// ELIMINAR
+
+	// no hace uso de dtos
+	@DeleteMapping("/5/{id}")
+	public ResponseEntity<Void> eliminar5(@PathVariable("id") Integer id) throws Exception {
+
+		Usuarios obj = service.listarPorId(id);
+
+		//
+		if (obj == null) {
+			throw new ModeloNoFound("NO EXISTE ESE ID : " + id);
+		}
+
+		//
+		service.eliminar(id);
+
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
 	
 	
-	
-	
-	
-	
-	
+	//HATEOAS 6
+	@GetMapping("/6")
+	public CollectionModel<EntityModel<UsuariosDTO>> listar6() throws Exception {
+	    List<Usuarios> lista = service.listar();
 
-	/*
-	 * @GetMapping("/5") public ResponseEntity<List<UsuariosDTO>> listarr() throws
-	 * Exception { List<UsuariosDTO> lista = service.listar().stream().map(p ->
-	 * mapper.map(p, UsuariosDTO.class)) .collect(Collectors.toList());
-	 * 
-	 * return new ResponseEntity<>(lista, HttpStatus.OK); }
-	 * 
-	 * @GetMapping("/6") public List<Usuarios> listarUsuariosDTOs() throws Exception
-	 * { //List<Usuarios> usuarios = service.listar();
-	 * 
-	 * List<Usuarios> usuariosDTOs = service.listar().stream().map(usu ->
-	 * mapper.map(usu, Usuarios.class)) .collect(Collectors.toList()); return
-	 * usuariosDTOs; }
-	 */
+	    if (lista.isEmpty()) {
+	      
+	    	return CollectionModel.of(Collections.emptyList());
+	    }
+
+	    WebMvcLinkBuilder linkBase = linkTo(methodOn(this.getClass()).listar5());
+	    List<EntityModel<UsuariosDTO>> usuariosDTO = lista.stream()
+	        .map(usuario -> {
+	            UsuariosDTO dto = mapper.map(usuario, UsuariosDTO.class);
+	            WebMvcLinkBuilder linkUsuario = crearLinkUsuario(usuario.getIdUsuario());
+	            EntityModel<UsuariosDTO> recurso = EntityModel.of(dto, linkUsuario.withRel("usuario-info"));
+	            return recurso;
+	        })
+	        .collect(Collectors.toList());
+
+	    CollectionModel<EntityModel<UsuariosDTO>> recursos = CollectionModel.of(usuariosDTO,
+	            linkBase.withRel("Todos-los-Usuarios"));
+
+	    return recursos;
+	}
+
+	@GetMapping("/6/{id}")
+	public EntityModel<UsuariosDTO> listarporId6(@PathVariable("id") Integer id) throws Exception {
+	    Usuarios obj = service.listarPorId(id);
+
+	    if (obj == null) {
+	        throw new ModeloNoFound("NO EXISTE ESE ID : " + id);
+	    }
+
+	    UsuariosDTO dto = mapper.map(obj, UsuariosDTO.class);
+	    WebMvcLinkBuilder linkUsuario = crearLinkUsuario(obj.getIdUsuario());
+	    EntityModel<UsuariosDTO> recurso = EntityModel.of(dto, linkUsuario.withRel("usuario-info"));
+
+	    return recurso;
+	}
+
+	private WebMvcLinkBuilder crearLinkUsuario(Integer idUsuario) {
+	    try {
+	        return linkTo(methodOn(this.getClass()).listarporId6(idUsuario));
+	    } catch (Exception e) {
+	        // Manejo de la excepción según tus necesidades
+	        return null; // O podrías devolver un enlace alternativo en caso de error
+	    }
+	}
+
+
 }
