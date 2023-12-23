@@ -52,6 +52,11 @@ public class Autores {
 		this.nombre = nombre;
 		this.nacionalidad = nacionalidad;
 	}
+
+	public Autores() {
+		super();
+	}
+	
 	
 	
 	

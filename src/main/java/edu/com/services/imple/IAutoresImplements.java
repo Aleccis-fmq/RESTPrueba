@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import edu.com.model.Autores;
+import edu.com.repo.IAutorRepo;
 import edu.com.repo.IUsuariosRepo;
 import edu.com.service.IAutorService;
 
@@ -13,13 +14,13 @@ public class IAutoresImplements extends IGenericImplements<Autores, Integer> imp
 
 	//IMPL
 	@Autowired
-	private IUsuariosRepo rep;
+	private IAutorRepo rep;
 	
 	
 	@Override
 	protected JpaRepository<Autores, Integer> getRepo() {
 		
-		return null;
+		return rep;
 	}
 	
 

@@ -27,6 +27,8 @@ public class UsuariosDTO {
 	@Size(min = 2,max = 4 , message = "{edad.size}")
 	private String edad;
 	
+	//GTS
+	
 	public Integer getIdUsuario() {
 		return idUsuario;
 	}

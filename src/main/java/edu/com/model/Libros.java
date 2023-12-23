@@ -1,5 +1,7 @@
 package edu.com.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
@@ -18,23 +20,27 @@ public class Libros {
 	
 	@Id
 	@GeneratedValue(strategy =  GenerationType.IDENTITY)
-	private Integer idUsuario;
+	private Integer idLibro;
 	
 	@Column(nullable = false)
 	private String titulo;
 	
 	//ManyToOne
+	
+	
 	@ManyToOne
 	@JoinColumn(name = "id_autor",nullable =  false,
 	foreignKey = @ForeignKey (name = "FK_libros_autores"))
 	private Autores autor;
 
-	public Integer getIdUsuario() {
-		return idUsuario;
+	
+
+	public Integer getIdLibro() {
+		return idLibro;
 	}
 
-	public void setIdUsuario(Integer idUsuario) {
-		this.idUsuario = idUsuario;
+	public void setIdLibro(Integer idLibro) {
+		this.idLibro = idLibro;
 	}
 
 	public String getTitulo() {
@@ -53,11 +59,16 @@ public class Libros {
 		this.autor = autor;
 	}
 
-	public Libros(Integer idUsuario, String titulo, Autores autor) {
+	public Libros(Integer idLibro, String titulo, Autores autor) {
 		super();
-		this.idUsuario = idUsuario;
+		this.idLibro = idLibro;
 		this.titulo = titulo;
 		this.autor = autor;
+	}
+	//
+
+	public Libros() {
+		super();
 	}
 	
 	

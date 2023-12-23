@@ -2,6 +2,9 @@ package edu.com.model;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
@@ -31,10 +34,14 @@ public class Prestamos {
 	
 	//fk
 	
+	
+	
 	@ManyToOne
 	@JoinColumn(name = "id_usuario", nullable =  false,
 	foreignKey = @ForeignKey (name = "FK_prestamo_usuario"))
 	private Usuarios usuario;
+	
+	
 	
 	@ManyToOne
 	@JoinColumn(name = "id_libro", nullable =  false,
@@ -89,6 +96,10 @@ public class Prestamos {
 		this.fechaDevolucion = fechaDevolucion;
 		this.usuario = usuario;
 		this.libro = libro;
+	}
+
+	public Prestamos() {
+		super();
 	}
 	
 	
