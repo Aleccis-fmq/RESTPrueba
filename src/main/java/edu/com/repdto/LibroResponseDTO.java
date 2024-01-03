@@ -1,11 +1,19 @@
 package edu.com.repdto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema (description = "Prestancion para Listar Libros con usuario")
 public class LibroResponseDTO {
 
 	
 	
+	@Schema (description = "Id libro")
 	private Integer idLibro;
+	
+	@Schema (description  = "Titulo libro")
     private String titulo;
+	
+	@Schema (description = "Solo nombre autor")
     private String nombreAutor;
     
     

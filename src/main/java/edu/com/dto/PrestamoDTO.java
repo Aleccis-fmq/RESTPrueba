@@ -4,30 +4,34 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+@Schema (description  = "TITLE")
 public class PrestamoDTO {
 
 	
 	private Integer idPrestamo;
 	
+	@Schema (description  = "Data")
 	@NotEmpty
 	@NotNull
 	@Size()
 	private LocalDateTime fechaPrestamo;
 	
+	@Schema (description  = "Data")
 	@NotEmpty
 	@Size()
 	private LocalDateTime fechaDevolucion;
 	
 	//FKS
-	
+	@Schema (description  = "Data")
 	@NotEmpty
 	private LibrosDTO librodto;
 	
-	
+	@Schema (description  = "Data")
 	@NotEmpty
 	private UsuariosDTO usuariodto;
 	
